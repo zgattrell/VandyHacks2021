@@ -1,0 +1,24 @@
+.heading {
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  background-color: #031d9c;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  outline: 1px solid black;
+  border-radius: 10px;
+}
+.container{
+  text-align: center;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 25px;
+  border-radius: 20px;
+
+}
+.strava-badge- { display: inline-block; height: 48px; text-align: center }
+.strava-badge- img { visibility: hidden; height: 48px; }
+.strava-badge-:hover { background-position: 0 -63px; }
+.strava-badge-follow { height: 48px; width: 48px; background: url(//badges.strava.com/echelon-sprite-48.png) no-repeat 0 0; }
