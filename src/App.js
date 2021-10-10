@@ -23,14 +23,17 @@ function App(props) {
   const [athlete_weight, setathlete_weight] = useState('');
   const [activity_distance, setactivity_distance] = useState(0);
 
+  const [activity_name, setactivity_name] = useState('');
+
   //Use the effect hook to run at page load to see if we have been redirected back from Strava oAuth Portal
   useEffect(() => {
+
     const queryParams = new URLSearchParams(window.location.search);
 
     code = queryParams.get('code');
     console.log(code);
     //If we find a code if the url use it to fetch the access and refresh tokens
-    if(code != '' & athlete_username == ''){
+    if((code != '' & code != null) & athlete_username == ''){
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,8 +52,7 @@ function App(props) {
           setathlete_sex(data.athlete.sex);
           setathlete_weight(data.athlete.weight);
           //Add the flag to render the data
-          showData = true;
-          console.log('access_token:' + data.athlete.username);
+          console.log('access_token:' + data.access_token);
         });
       })
       .catch(err => {
@@ -58,7 +60,29 @@ function App(props) {
       })
 
     }
+
+    //Get the activity name and distance
+    if(!showData){
+    var fetchString2 = 'https://www.strava.com/api/v3/athlete/activities?access_token=22a7c286a8d1b091c98a933a447a567bee1f6317'
+    fetch(fetchString2,)
+    .then(response => {
+      //do something with response
+      response.json().then(data => {
+        //Add the flag to render the data
+        console.log("LOGGING DATA");
+        console.log(data);
+        setactivity_name(data[0].name)
+        setactivity_distance(data[0].moving_time)
+        console.log(activity_distance);
+        showData = true;
+      });
+    })
+    .catch(err => {
+      throw new Error(err)
+    })
+  }
   });
+
   //create the container to display the data.
   if(showData){
     var dataContainer = '<Data';
@@ -79,10 +103,10 @@ function App(props) {
       <div className="heading" >VandyHacks 2021 - Galactic Calorie Tracker</div>
       <div className="container" >
         <p>Click here to sign into your Strava Account!</p>
-<a href="https://www.strava.com/oauth/authorize?client_id=72890&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=read" className="strava-badge- strava-badge-follow" target="_blank"><img src="//badges.strava.com/echelon-sprite-48.png" alt="Strava" /></a>
+<a href="https://www.strava.com/oauth/authorize?client_id=72890&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read" className="strava-badge- strava-badge-follow" target="_blank"><img src="//badges.strava.com/echelon-sprite-48.png" alt="Strava" /></a>
 
 <hr/>
-<p>Username: {athlete_username} | Name: {athlete_firstName} {athlete_lastName} | Weight: {athlete_weight}</p>
+<p>Username: {athlete_username} | Name: {athlete_firstName} {athlete_lastName} | Weight: {athlete_weight} | Last Activity Name: {activity_name} | Last Activity Duration: {activity_distance} seconds</p>
 </div>
 
 
